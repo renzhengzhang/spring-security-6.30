@@ -1,0 +1,29 @@
+name: Update Antora UI Spring
+
+on:
+  workflow_dispatch:
+
+permissions:
+  pull-requests: write
+  issues: write
+  contents: write
+
+jobs:
+  update-antora-ui-spring:
+    runs-on: ubuntu-latest
+    name: Update
+    strategy:
+      matrix:
+        branch: [ '5.8.x', '6.1.x', '6.2.x', 'main' ]
+    steps:
+      - uses: spring-io/spring-doc-actions/update-antora-spring-ui@17ed79ea5fbd65813c69ef1062a024d4a37ff0ca
+        name: Update on Supported Branches
+        with:
+          docs-branch: ${{ matrix.branch }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          antora-file-path: 'docs/antora-playbook.yml'
+      - uses: spring-io/spring-doc-actions/update-antora-spring-ui@17ed79ea5fbd65813c69ef1062a024d4a37ff0ca
+        name: Update on docs-build
+        with:
+          docs-branch: 'docs-build'
+          token: ${{ secrets.GITHUB_TOKEN }}
